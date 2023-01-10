@@ -44,7 +44,7 @@ jobs:
          path: |
            .npm
            node_modules
-         key: ${{ runner.OS }}-npm2-cache-${{ hashFiles('**/package-lock.json') }}
+         key: ${{ runner.OS }}-npm-cache-${{ hashFiles('**/package-lock.json') }}
          restore-keys: |
           ${{ runner.OS }}-npm2-cache-   
       # And make it available for builds
