@@ -1,0 +1,42 @@
+name: Trigger auto deployment for test-sample-5
+
+# When this action will be executed
+on:
+  # Automatically trigger it when detected changes in repo
+  push:
+    branches: 
+      [ Main ]
+    paths:
+    - '**'
+    - '.github/workflows/test-sample-5-AutoDeployTrigger-6890976f-6966-4b68-adf4-226574db027f.yml'
+
+  # Allow mannually trigger 
+  workflow_dispatch:
+      
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout to the branch
+        uses: actions/checkout@v2
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.TESTSAMPLE5_AZURE_CREDENTIALS }}
+
+      - name: Build and push container image to registry
+        uses: azure/container-apps-deploy-action@v1
+        with:
+          appSourcePath: ${{ github.workspace }} 
+          registryUrl: snehaparacr.azurecr.io
+          registryUsername: ${{ secrets.TESTSAMPLE5_REGISTRY_USERNAME }}
+          registryPassword: ${{ secrets.TESTSAMPLE5_REGISTRY_PASSWORD }}
+          containerAppName: test-sample-5
+          resourceGroup: ca-snehapar-group
+          imageToBuild: snehaparacr.azurecr.io/test-sample-5:${{ github.sha }}
+          
+
+     
+
